@@ -34,21 +34,8 @@ public abstract class Customer {
         if (!account.getCurrency().equals(currency)) {
             throw new RuntimeException("Can't extract withdraw " + currency);
         }
-        applyWithdraw(sum, overdraftMultiplier());
+        account.withdraw(sum, overdraftMultiplier());
     }
-
-
-    private void applyWithdraw(double sum, double overdraftMultiplier) {
-        if (account.getMoney() < 0) {
-            account.setMoney(
-                    (account.getMoney() - sum)
-                            - sum * account.overdraftFee() * overdraftMultiplier
-            );
-        } else {
-            account.setMoney(account.getMoney() - sum);
-        }
-    }
-
 
     public String getName() {
         return name;

@@ -82,4 +82,13 @@ public class Account {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
+
+    public void withdraw(double sum, double overdraftMultiplier) {
+        if (money < 0) {
+            money = (money - sum) - sum * overdraftFee() * overdraftMultiplier;
+        } else {
+            money = money - sum;
+        }
+    }
+
 }
