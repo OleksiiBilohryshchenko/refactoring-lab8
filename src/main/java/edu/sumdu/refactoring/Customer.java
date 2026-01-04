@@ -29,47 +29,39 @@ public class Customer {
         if (!account.getCurrency().equals(currency)) {
             throw new RuntimeException("Can't extract withdraw " + currency);
         }
+
         if (account.getType().isPremium()) {
             switch (customerType) {
                 case COMPANY:
-                    if (account.getMoney() < 0) {
-                        account.setMoney((account.getMoney() - sum)
-                                - sum * account.overdraftFee() * companyOverdraftDiscount / 2);
-                    } else {
-                        account.setMoney(account.getMoney() - sum);
-                    }
+                    applyWithdraw(sum, companyOverdraftDiscount / 2);
                     break;
                 case PERSON:
-                    if (account.getMoney() < 0) {
-                        account.setMoney((account.getMoney() - sum)
-                                - sum * account.overdraftFee());
-                    } else {
-                        account.setMoney(account.getMoney() - sum);
-                    }
+                    applyWithdraw(sum, 1);
                     break;
             }
-
         } else {
             switch (customerType) {
                 case COMPANY:
-                    if (account.getMoney() < 0) {
-                        account.setMoney((account.getMoney() - sum)
-                                - sum * account.overdraftFee() * companyOverdraftDiscount);
-                    } else {
-                        account.setMoney(account.getMoney() - sum);
-                    }
+                    applyWithdraw(sum, companyOverdraftDiscount);
                     break;
                 case PERSON:
-                    if (account.getMoney() < 0) {
-                        account.setMoney((account.getMoney() - sum)
-                                - sum * account.overdraftFee());
-                    } else {
-                        account.setMoney(account.getMoney() - sum);
-                    }
+                    applyWithdraw(sum, 1);
                     break;
             }
         }
     }
+
+    private void applyWithdraw(double sum, double overdraftMultiplier) {
+        if (account.getMoney() < 0) {
+            account.setMoney(
+                    (account.getMoney() - sum)
+                            - sum * account.overdraftFee() * overdraftMultiplier
+            );
+        } else {
+            account.setMoney(account.getMoney() - sum);
+        }
+    }
+
 
     public String getName() {
         return name;
