@@ -119,6 +119,8 @@ public class CustomerTest {
         );
     }
 
+    // ---------- helpers ----------
+
     private Customer getPersonWithAccount(boolean premium) {
         AccountType accountType = new AccountType(premium);
         Account account = new Account(accountType, 9);
@@ -144,14 +146,14 @@ public class CustomerTest {
 
     private Customer getPersonCustomer(Account account) {
         Customer customer =
-                new Customer("danix", "dan", "dan@mail.com", CustomerType.PERSON, account);
+                new PersonCustomer("danix", "dan", "dan@mail.com", account);
         account.setCustomer(customer);
         return customer;
     }
 
     private Customer getCompanyCustomer(Account account) {
         Customer customer =
-                new Customer("company", "company@mail.com", account, 0.50);
+                new CompanyCustomer("company", "company@mail.com", account, 0.50);
         account.setCustomer(customer);
         return customer;
     }

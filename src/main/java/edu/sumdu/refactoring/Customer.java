@@ -1,6 +1,6 @@
 package edu.sumdu.refactoring;
 
-public class Customer {
+public abstract class Customer {
 
     private String name;
     private String surname;
@@ -8,6 +8,11 @@ public class Customer {
     private CustomerType customerType;
     private Account account;
     private double companyOverdraftDiscount = 1;
+    protected abstract double overdraftMultiplier();
+
+    protected Account getAccount() {
+        return account;
+    }
 
     public Customer(String name, String surname, String email, CustomerType customerType, Account account) {
         this.name = name;
@@ -29,27 +34,9 @@ public class Customer {
         if (!account.getCurrency().equals(currency)) {
             throw new RuntimeException("Can't extract withdraw " + currency);
         }
-
-        if (account.getType().isPremium()) {
-            switch (customerType) {
-                case COMPANY:
-                    applyWithdraw(sum, companyOverdraftDiscount / 2);
-                    break;
-                case PERSON:
-                    applyWithdraw(sum, 1);
-                    break;
-            }
-        } else {
-            switch (customerType) {
-                case COMPANY:
-                    applyWithdraw(sum, companyOverdraftDiscount);
-                    break;
-                case PERSON:
-                    applyWithdraw(sum, 1);
-                    break;
-            }
-        }
+        applyWithdraw(sum, overdraftMultiplier());
     }
+
 
     private void applyWithdraw(double sum, double overdraftMultiplier) {
         if (account.getMoney() < 0) {
