@@ -31,7 +31,7 @@ public abstract class Customer {
     }
 
     public void withdraw(double sum, String currency) {
-        if (!account.getCurrency().equals(currency)) {
+        if (!account.getBalance().getCurrency().equals(currency)) {
             throw new RuntimeException("Can't extract withdraw " + currency);
         }
         account.withdraw(sum, overdraftMultiplier());

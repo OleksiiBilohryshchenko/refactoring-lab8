@@ -5,8 +5,7 @@ public class Account {
     private String iban;
     private AccountType type;
     private int daysOverdrawn;
-    private double money;
-    private String currency;
+    private Money balance;
     private Customer customer;
 
     public Account(AccountType type, int daysOverdrawn) {
@@ -51,14 +50,6 @@ public class Account {
         this.iban = iban;
     }
 
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
     public Customer getCustomer() {
         return customer;
     }
@@ -75,19 +66,39 @@ public class Account {
         return customer.getName() + " " + customer.getEmail();
     }
 
-    public String getCurrency() {
-        return currency;
+    public Money getBalance() {
+        return balance;
+    }
+
+
+    public void withdraw(double sum, double overdraftMultiplier) {
+        if (balance.isNegative()) {
+            balance.subtractWithFee(
+                    sum,
+                    sum * overdraftFee() * overdraftMultiplier
+            );
+        } else {
+            balance.subtract(sum);
+        }
+    }
+
+    public void setMoney(double money) {
+        if (this.balance == null) {
+            this.balance = new Money(money, null);
+        } else {
+            this.balance = new Money(money, this.balance.getCurrency());
+        }
+    }
+
+    public double getMoney() {
+        return balance.getAmount();
     }
 
     public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public void withdraw(double sum, double overdraftMultiplier) {
-        if (money < 0) {
-            money = (money - sum) - sum * overdraftFee() * overdraftMultiplier;
+        if (this.balance == null) {
+            this.balance = new Money(0, currency);
         } else {
-            money = money - sum;
+            this.balance = new Money(this.balance.getAmount(), currency);
         }
     }
 
