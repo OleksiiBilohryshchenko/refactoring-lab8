@@ -11,7 +11,7 @@ public class CompanyCustomer extends Customer {
 
     @Override
     protected double overdraftMultiplier() {
-        if (getAccount().getType().isPremium()) {
+        if (getAccount().isPremium()) {
             return companyOverdraftDiscount / 2;
         }
         return companyOverdraftDiscount;

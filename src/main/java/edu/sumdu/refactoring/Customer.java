@@ -62,6 +62,6 @@ public abstract class Customer {
     public String printCustomerAccount() {
         return "Account: IBAN: " + account.getIban()
                 + ", Money: " + account.getMoney()
-                + ", Account type: " + account.getType();
+                + ", Account type: " + (account.isPremium() ? "premium" : "normal");
     }
 }

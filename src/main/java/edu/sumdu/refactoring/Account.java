@@ -3,14 +3,13 @@ package edu.sumdu.refactoring;
 public class Account {
 
     private String iban;
-    private AccountType type;
+    private boolean premium;
     private int daysOverdrawn;
     private Money balance;
     private Customer customer;
 
-    public Account(AccountType type, int daysOverdrawn) {
-        super();
-        this.type = type;
+    public Account(boolean premium, int daysOverdrawn) {
+        this.premium = premium;
         this.daysOverdrawn = daysOverdrawn;
     }
 
@@ -21,7 +20,7 @@ public class Account {
     }
 
     private double overdraftCharge() {
-        if (type.isPremium()) {
+        if (premium) {
             double result = 10;
             if (getDaysOverdrawn() > 7)
                 result += (getDaysOverdrawn() - 7) * 1.0;
@@ -31,7 +30,7 @@ public class Account {
     }
 
     public double overdraftFee() {
-        if (type.isPremium()) {
+        if (premium) {
             return 0.10;
         } else {
             return 0.20;
@@ -58,8 +57,8 @@ public class Account {
         this.customer = customer;
     }
 
-    public AccountType getType() {
-        return type;
+    public boolean isPremium() {
+        return premium;
     }
 
     public String printCustomer() {
